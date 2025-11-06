@@ -9,9 +9,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, ArrowUpDown, Eye, EyeOff, Pill } from "lucide-react";
+import { Pencil, Trash2, ArrowUpDown, Eye, EyeOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import * as LucideIcons from "lucide-react";
+import { getIconComponent } from "@/lib/iconLookup";
 
 type SortField = "name" | "category" | "wholesale_price" | "retail_price" | "quantity";
 type SortDirection = "asc" | "desc";
@@ -119,9 +119,7 @@ export const ProductTable = ({
             </TableRow>
           ) : (
             sortedProducts.map((product) => {
-              const IconComponent = product.icon && (LucideIcons as any)[product.icon] 
-                ? (LucideIcons as any)[product.icon] 
-                : Pill;
+              const IconComponent = getIconComponent(product.icon);
 
               return (
                 <TableRow key={product.id} className="hover:bg-muted/50">

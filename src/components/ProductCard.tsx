@@ -3,8 +3,8 @@ import { Product } from "@/types/product";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Trash2, Eye, EyeOff, Pill } from "lucide-react";
-import * as LucideIcons from "lucide-react";
+import { Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { getIconComponent } from "@/lib/iconLookup";
 
 interface ProductCardProps {
   product: Product;
@@ -30,9 +30,7 @@ export const ProductCard = ({
     localStorage.setItem("showWholesale", JSON.stringify(showWholesale));
   }, [showWholesale]);
 
-  const IconComponent = product.icon && (LucideIcons as any)[product.icon] 
-    ? (LucideIcons as any)[product.icon] 
-    : Pill;
+  const IconComponent = getIconComponent(product.icon);
 
   return (
     <Card className="transition-all hover:shadow-md">
