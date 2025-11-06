@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg}"],
+        navigateFallback: null,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -52,6 +53,10 @@ export default defineConfig(({ mode }) => ({
                 statuses: [0, 200],
               },
             },
+          },
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/auth\/.*/i,
+            handler: "NetworkOnly",
           },
         ],
       },

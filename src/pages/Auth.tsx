@@ -22,20 +22,20 @@ const Auth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/products");
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        window.location.href = '/products';
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/products");
+        window.location.href = '/products';
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, []);
 
   const handleAuth = async (isSignUp: boolean) => {
     try {
@@ -52,7 +52,7 @@ const Auth = () => {
       }
 
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -70,6 +70,12 @@ const Auth = () => {
           } else {
             throw error;
           }
+        } else if (data.session) {
+          toast({
+            title: "Success!",
+            description: "Account created successfully.",
+          });
+          window.location.href = '/products';
         } else {
           toast({
             title: "Success!",
@@ -77,7 +83,7 @@ const Auth = () => {
           });
         }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
@@ -92,6 +98,8 @@ const Auth = () => {
           } else {
             throw error;
           }
+        } else if (data.session) {
+          window.location.href = '/products';
         }
       }
     } catch (error: any) {
