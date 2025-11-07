@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 export type UserRole = "admin" | "moderator" | "user";
 
@@ -9,13 +10,14 @@ export const useAuth = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
           setTimeout(() => {
             fetchUserRole(session.user.id);
@@ -30,7 +32,7 @@ export const useAuth = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
         fetchUserRole(session.user.id);
       } else {
@@ -52,7 +54,7 @@ export const useAuth = () => {
         .maybeSingle();
 
       if (error) throw error;
-      
+
       setUserRole(data?.role as UserRole || "user");
     } catch (error) {
       console.error("Error fetching user role:", error);
@@ -64,13 +66,20 @@ export const useAuth = () => {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      // Clear user state
+      setUser(null);
+      setSession(null);
+      setUserRole(null);
+
+      // Navigate to auth page
+      navigate("/auth");
     } catch (error) {
       console.error('Error signing out:', error);
     } finally {
-      // Force a fresh navigation to avoid any PWA caching issues
-      const ts = Date.now();
-      window.location.replace(`/auth?ts=${ts}`);
+      setLoading(false);
     }
   };
 
