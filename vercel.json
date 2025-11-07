@@ -1,13 +1,11 @@
 {
-  "headers": [
-    {
-      "source": "/index.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache" }
-      ]
-    }
-  ],
   "routes": [
+    {
+      "src": "/index.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
+    },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
