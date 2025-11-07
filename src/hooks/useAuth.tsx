@@ -65,10 +65,12 @@ export const useAuth = () => {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      window.location.href = '/auth';
     } catch (error) {
       console.error('Error signing out:', error);
-      window.location.href = '/auth';
+    } finally {
+      // Force a fresh navigation to avoid any PWA caching issues
+      const ts = Date.now();
+      window.location.replace(`/auth?ts=${ts}`);
     }
   };
 
