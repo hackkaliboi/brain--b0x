@@ -6,6 +6,8 @@ export interface Product {
   quantity: number;
   category: string;
   unit: string;
+  wholesale_unit?: string;
+  retail_unit?: string;
   expiry_date?: string | null;
   lastUpdated: string;
 }

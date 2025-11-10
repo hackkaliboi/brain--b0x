@@ -27,6 +27,8 @@ const productSchema = z.object({
   quantity: z.coerce.number().int().min(0, "Quantity must be 0 or positive"),
   category: z.string().min(1, "Category is required"),
   unit: z.string().min(1, "Unit is required").max(50),
+  wholesale_unit: z.string().optional(),
+  retail_unit: z.string().optional(),
   expiry_date: z.string().optional(),
 });
 
@@ -48,6 +50,8 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
           quantity: product.quantity,
           category: product.category,
           unit: product.unit,
+          wholesale_unit: product.wholesale_unit || "",
+          retail_unit: product.retail_unit || "",
           expiry_date: product.expiry_date || "",
         }
       : {
@@ -57,6 +61,8 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
           quantity: 0,
           category: "",
           unit: "unit",
+          wholesale_unit: "",
+          retail_unit: "",
           expiry_date: "",
         },
   });
@@ -108,6 +114,36 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
           />
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="wholesale_unit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Wholesale Unit (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g., pack, box" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="retail_unit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Retail Unit (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g., card, strip" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <FormField
             control={form.control}
@@ -128,7 +164,7 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
             name="unit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Unit</FormLabel>
+                <FormLabel>Default Unit</FormLabel>
                 <FormControl>
                   <Input placeholder="e.g., card, bottle, pack" {...field} />
                 </FormControl>

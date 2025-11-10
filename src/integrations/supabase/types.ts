@@ -43,8 +43,10 @@ export type Database = {
           name: string
           quantity: number
           retail_price: number
+          retail_unit: string | null
           unit: string
           wholesale_price: number
+          wholesale_unit: string | null
         }
         Insert: {
           category: string
@@ -56,8 +58,10 @@ export type Database = {
           name: string
           quantity?: number
           retail_price?: number
+          retail_unit?: string | null
           unit?: string
           wholesale_price?: number
+          wholesale_unit?: string | null
         }
         Update: {
           category?: string
@@ -69,8 +73,10 @@ export type Database = {
           name?: string
           quantity?: number
           retail_price?: number
+          retail_unit?: string | null
           unit?: string
           wholesale_price?: number
+          wholesale_unit?: string | null
         }
         Relationships: []
       }

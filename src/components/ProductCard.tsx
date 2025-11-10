@@ -29,9 +29,6 @@ export const ProductCard = ({
     localStorage.setItem("showWholesale", JSON.stringify(showWholesale));
   }, [showWholesale]);
 
-  const wholesaleTotal = product.wholesale_price * product.quantity;
-  const retailTotal = product.retail_price * product.quantity;
-
   return (
     <Card className="transition-all hover:shadow-md">
       <CardContent className="p-4 space-y-3">
@@ -74,38 +71,34 @@ export const ProductCard = ({
           {showWholesale && (
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <p className="text-muted-foreground">Wholesale Unit</p>
+                <p className="text-muted-foreground">Wholesale Price</p>
                 <p className="font-semibold">₦{product.wholesale_price.toLocaleString()}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Wholesale Price</p>
-                <p className="font-semibold">₦{wholesaleTotal.toLocaleString()}</p>
+                <p className="text-muted-foreground">Wholesale Unit</p>
+                <p className="font-semibold">{product.wholesale_unit || product.unit}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Unit</p>
-                <p className="font-semibold">{product.unit}</p>
+                <p className="text-muted-foreground">Quantity</p>
+                <p className="font-semibold">{product.quantity}</p>
               </div>
             </div>
           )}
           <div className={showWholesale ? "grid grid-cols-3 gap-2" : "grid grid-cols-3 gap-2"}>
             <div>
-              <p className="text-muted-foreground">Retail Unit</p>
+              <p className="text-muted-foreground">Retail Price</p>
               <p className="font-semibold">₦{product.retail_price.toLocaleString()}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Retail Price</p>
-              <p className="font-semibold">₦{retailTotal.toLocaleString()}</p>
+              <p className="text-muted-foreground">Retail Unit</p>
+              <p className="font-semibold">{product.retail_unit || product.unit}</p>
             </div>
             {!showWholesale && (
               <div>
-                <p className="text-muted-foreground">Unit</p>
-                <p className="font-semibold">{product.unit}</p>
+                <p className="text-muted-foreground">Quantity</p>
+                <p className="font-semibold">{product.quantity}</p>
               </div>
             )}
-            <div>
-              <p className="text-muted-foreground">Quantity</p>
-              <p className="font-semibold">{product.quantity}</p>
-            </div>
           </div>
         </div>
 
@@ -119,7 +112,7 @@ export const ProductCard = ({
         {!product.expiry_date && (
           <div className="text-sm pt-2 border-t">
             <span className="text-muted-foreground">Quantity: </span>
-            <span className="font-semibold">{product.quantity} {product.unit}</span>
+            <span className="font-semibold">{product.quantity}</span>
           </div>
         )}
       </CardContent>

@@ -155,12 +155,21 @@ const Products = () => {
         return;
       }
 
-      const { error } = await supabase.from("products").insert([
-        {
-          ...data,
-          last_updated: new Date().toISOString(),
-        },
-      ]);
+      // Map TypeScript field names to database column names
+      const insertData = {
+        name: data.name,
+        wholesale_price: data.wholesale_price,
+        retail_price: data.retail_price,
+        quantity: data.quantity,
+        category: data.category,
+        unit: data.unit,
+        wholesale_unit: data.wholesale_unit,
+        retail_unit: data.retail_unit,
+        expiry_date: data.expiry_date,
+        last_updated: new Date().toISOString(),
+      };
+
+      const { error } = await supabase.from("products").insert([insertData]);
 
       if (error) throw error;
 
@@ -184,12 +193,23 @@ const Products = () => {
     if (!editingProduct) return;
 
     try {
+      // Map TypeScript field names to database column names
+      const updateData = {
+        name: data.name,
+        wholesale_price: data.wholesale_price,
+        retail_price: data.retail_price,
+        quantity: data.quantity,
+        category: data.category,
+        unit: data.unit,
+        wholesale_unit: data.wholesale_unit,
+        retail_unit: data.retail_unit,
+        expiry_date: data.expiry_date,
+        last_updated: new Date().toISOString(),
+      };
+
       const { error } = await supabase
         .from("products")
-        .update({
-          ...data,
-          last_updated: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq("id", editingProduct.id);
 
       if (error) throw error;
