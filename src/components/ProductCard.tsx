@@ -31,8 +31,11 @@ export const ProductCard = ({
     localStorage.setItem("showWholesale", JSON.stringify(showWholesale));
   }, [showWholesale]);
 
-  const handleCardClick = () => {
-    navigate(`/products/${product.id}`);
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Only navigate if the click didn't come from a button
+    if (!(e.target instanceof HTMLElement) || !e.target.closest('button')) {
+      navigate(`/products/${product.id}`);
+    }
   };
 
   return (
