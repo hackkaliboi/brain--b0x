@@ -102,9 +102,16 @@ export const ProductTable = ({
           <TableRow>
             <SortableHeader field="name">Product Name</SortableHeader>
             <SortableHeader field="category">Category</SortableHeader>
-            {showWholesale && <SortableHeader field="wholesale_price" align="right">Wholesale Price</SortableHeader>}
+            {showWholesale && (
+              <>
+                <SortableHeader field="wholesale_price" align="right">Wholesale Unit Price</SortableHeader>
+                <SortableHeader field="wholesale_price" align="right">Wholesale Price</SortableHeader>
+              </>
+            )}
+            <SortableHeader field="retail_price" align="right">Retail Unit Price</SortableHeader>
             <SortableHeader field="retail_price" align="right">Retail Price</SortableHeader>
             <SortableHeader field="quantity" align="right">Quantity</SortableHeader>
+            <TableHead className="font-semibold">Unit</TableHead>
             <TableHead className="font-semibold">Expiry Date</TableHead>
             {(canEdit || isAdmin) && <TableHead className="font-semibold text-center">Actions</TableHead>}
           </TableRow>
@@ -112,12 +119,15 @@ export const ProductTable = ({
         <TableBody>
           {sortedProducts.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={showWholesale ? 7 : 6} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={showWholesale ? 9 : 7} className="text-center text-muted-foreground py-8">
                 No products found
               </TableCell>
             </TableRow>
           ) : (
             sortedProducts.map((product) => {
+              const wholesaleTotal = product.wholesale_price * product.quantity;
+              const retailTotal = product.retail_price * product.quantity;
+              
               return (
                 <TableRow key={product.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium">
@@ -127,15 +137,26 @@ export const ProductTable = ({
                     <Badge variant="secondary">{product.category}</Badge>
                   </TableCell>
                   {showWholesale && (
-                    <TableCell className="text-right">
-                      ₦{product.wholesale_price.toLocaleString()} / {product.unit}
-                    </TableCell>
+                    <>
+                      <TableCell className="text-right">
+                        ₦{product.wholesale_price.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        ₦{wholesaleTotal.toLocaleString()}
+                      </TableCell>
+                    </>
                   )}
                   <TableCell className="text-right">
-                    ₦{product.retail_price.toLocaleString()} / {product.unit}
+                    ₦{product.retail_price.toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    ₦{retailTotal.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right">
                     <span className="font-semibold">{product.quantity}</span>
+                  </TableCell>
+                  <TableCell>
+                    {product.unit}
                   </TableCell>
                   <TableCell>
                     {product.expiry_date ? (

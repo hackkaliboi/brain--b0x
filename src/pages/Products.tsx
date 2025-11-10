@@ -139,6 +139,22 @@ const Products = () => {
 
   const handleAddProduct = async (data: ProductFormData) => {
     try {
+      // Check for duplicate product (same name and category)
+      const isDuplicate = products.some(
+        (product) => 
+          product.name.toLowerCase() === data.name.toLowerCase() && 
+          product.category.toLowerCase() === data.category.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        toast({
+          title: "Duplicate Product",
+          description: "A product with the same name and category already exists.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { error } = await supabase.from("products").insert([
         {
           ...data,

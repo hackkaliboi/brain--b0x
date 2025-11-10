@@ -29,6 +29,9 @@ export const ProductCard = ({
     localStorage.setItem("showWholesale", JSON.stringify(showWholesale));
   }, [showWholesale]);
 
+  const wholesaleTotal = product.wholesale_price * product.quantity;
+  const retailTotal = product.retail_price * product.quantity;
+
   return (
     <Card className="transition-all hover:shadow-md">
       <CardContent className="p-4 space-y-3">
@@ -67,16 +70,42 @@ export const ProductCard = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-sm">
+        <div className="grid grid-cols-1 gap-3 text-sm">
           {showWholesale && (
-            <div>
-              <p className="text-muted-foreground">Wholesale</p>
-              <p className="font-semibold">₦{product.wholesale_price.toLocaleString()} / {product.unit}</p>
+            <div className="grid grid-cols-3 gap-2">
+              <div>
+                <p className="text-muted-foreground">Wholesale Unit</p>
+                <p className="font-semibold">₦{product.wholesale_price.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Wholesale Price</p>
+                <p className="font-semibold">₦{wholesaleTotal.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Unit</p>
+                <p className="font-semibold">{product.unit}</p>
+              </div>
             </div>
           )}
-          <div className={showWholesale ? "" : "col-span-2"}>
-            <p className="text-muted-foreground">Retail</p>
-            <p className="font-semibold">₦{product.retail_price.toLocaleString()} / {product.unit}</p>
+          <div className={showWholesale ? "grid grid-cols-3 gap-2" : "grid grid-cols-3 gap-2"}>
+            <div>
+              <p className="text-muted-foreground">Retail Unit</p>
+              <p className="font-semibold">₦{product.retail_price.toLocaleString()}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Retail Price</p>
+              <p className="font-semibold">₦{retailTotal.toLocaleString()}</p>
+            </div>
+            {!showWholesale && (
+              <div>
+                <p className="text-muted-foreground">Unit</p>
+                <p className="font-semibold">{product.unit}</p>
+              </div>
+            )}
+            <div>
+              <p className="text-muted-foreground">Quantity</p>
+              <p className="font-semibold">{product.quantity}</p>
+            </div>
           </div>
         </div>
 
@@ -87,10 +116,12 @@ export const ProductCard = ({
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-2 border-t">
-          <span className="text-sm text-muted-foreground">Quantity</span>
-          <span className="font-semibold">{product.quantity}</span>
-        </div>
+        {!product.expiry_date && (
+          <div className="text-sm pt-2 border-t">
+            <span className="text-muted-foreground">Quantity: </span>
+            <span className="font-semibold">{product.quantity} {product.unit}</span>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
