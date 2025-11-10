@@ -8,7 +8,6 @@ export interface Product {
   unit: string;
   wholesale_unit?: string;
   retail_unit?: string;
-  image_url?: string;
   expiry_date?: string | null;
   lastUpdated: string;
 }

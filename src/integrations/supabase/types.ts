@@ -39,7 +39,6 @@ export type Database = {
           expiry_date: string | null
           icon: string | null
           id: string
-          image_url: string | null
           last_updated: string
           name: string
           quantity: number
@@ -55,7 +54,6 @@ export type Database = {
           expiry_date?: string | null
           icon?: string | null
           id?: string
-          image_url?: string | null
           last_updated?: string
           name: string
           quantity?: number
@@ -71,7 +69,6 @@ export type Database = {
           expiry_date?: string | null
           icon?: string | null
           id?: string
-          image_url?: string | null
           last_updated?: string
           name?: string
           quantity?: number

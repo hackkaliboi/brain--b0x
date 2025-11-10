@@ -32,20 +32,6 @@ export const ProductCard = ({
   return (
     <Card className="transition-all hover:shadow-md">
       <CardContent className="p-4 space-y-3">
-        {product.image_url && (
-          <div className="flex justify-center">
-            <img 
-              src={product.image_url} 
-              alt={product.name} 
-              className="h-24 w-24 object-contain rounded-md"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-              }}
-            />
-          </div>
-        )}
-        
         <div className="flex items-start justify-between">
           <div className="flex-1 space-y-1">
             <h3 className="font-semibold text-lg">{product.name}</h3>
