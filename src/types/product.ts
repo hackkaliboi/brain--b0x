@@ -6,7 +6,6 @@ export interface Product {
   quantity: number;
   category: string;
   unit: string;
-  icon?: string;
   expiry_date?: string | null;
   lastUpdated: string;
 }

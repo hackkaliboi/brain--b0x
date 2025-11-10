@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, ArrowUpDown, Eye, EyeOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { getIconComponent } from "@/lib/iconLookup";
 
 type SortField = "name" | "category" | "wholesale_price" | "retail_price" | "quantity";
 type SortDirection = "asc" | "desc";
@@ -119,17 +118,10 @@ export const ProductTable = ({
             </TableRow>
           ) : (
             sortedProducts.map((product) => {
-              const IconComponent = getIconComponent(product.icon);
-
               return (
                 <TableRow key={product.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium">
-                    <div className="flex items-center gap-3">
-                      <div className="p-1.5 rounded-md bg-primary/10">
-                        <IconComponent className="h-5 w-5 text-primary" strokeWidth={2.5} />
-                      </div>
-                      <span>{product.name}</span>
-                    </div>
+                    <span>{product.name}</span>
                   </TableCell>
                   <TableCell>
                     <Badge variant="secondary">{product.category}</Badge>

@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IconSelector } from "@/components/IconSelector";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(100),
@@ -28,7 +27,6 @@ const productSchema = z.object({
   quantity: z.coerce.number().int().min(0, "Quantity must be 0 or positive"),
   category: z.string().min(1, "Category is required"),
   unit: z.string().min(1, "Unit is required").max(50),
-  icon: z.string().optional(),
   expiry_date: z.string().optional(),
 });
 
@@ -50,7 +48,6 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
           quantity: product.quantity,
           category: product.category,
           unit: product.unit,
-          icon: product.icon || "Pill",
           expiry_date: product.expiry_date || "",
         }
       : {
@@ -60,7 +57,6 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
           quantity: 0,
           category: "",
           unit: "unit",
-          icon: "Pill",
           expiry_date: "",
         },
   });
@@ -166,20 +162,6 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
             )}
           />
         </div>
-
-        <FormField
-          control={form.control}
-          name="icon"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Icon</FormLabel>
-              <FormControl>
-                <IconSelector value={field.value} onChange={field.onChange} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
