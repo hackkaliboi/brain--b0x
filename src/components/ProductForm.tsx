@@ -19,6 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(100),
@@ -69,6 +72,54 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
         expiry_date: "",
       },
   });
+  
+  const { toast } = useToast();
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (file: File) => {
+    try {
+      setIsUploading(true);
+      
+      // Generate a unique file name
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      
+      // Upload the file to Supabase storage
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, file);
+      
+      if (error) throw error;
+      
+      // Get the public URL for the uploaded file
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+      
+      // Set the image URL in the form
+      form.setValue('image_url', publicUrl);
+      
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error uploading image",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -207,9 +258,37 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
           name="image_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Product Image URL (Optional)</FormLabel>
+              <FormLabel>Product Image (Optional)</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/image.jpg" {...field} />
+                <div className="space-y-2">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    disabled={isUploading}
+                  />
+                  {isUploading && (
+                    <p className="text-sm text-muted-foreground">Uploading...</p>
+                  )}
+                  {field.value && (
+                    <div className="mt-2">
+                      <img 
+                        src={field.value} 
+                        alt="Preview" 
+                        className="h-20 w-20 object-contain rounded"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="mt-2"
+                        onClick={() => form.setValue('image_url', '')}
+                      >
+                        Remove Image
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
