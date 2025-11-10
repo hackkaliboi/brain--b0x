@@ -29,6 +29,7 @@ const productSchema = z.object({
   unit: z.string().min(1, "Unit is required").max(50),
   wholesale_unit: z.string().optional(),
   retail_unit: z.string().optional(),
+  image_url: z.string().optional(),
   expiry_date: z.string().optional(),
 });
 
@@ -52,6 +53,7 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
         unit: product.unit,
         wholesale_unit: product.wholesale_unit || "",
         retail_unit: product.retail_unit || "",
+        image_url: product.image_url || "",
         expiry_date: product.expiry_date || "",
       }
       : {
@@ -63,6 +65,7 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
         unit: "unit",
         wholesale_unit: "",
         retail_unit: "",
+        image_url: "",
         expiry_date: "",
       },
   });
@@ -198,6 +201,20 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="image_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Image URL (Optional)</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/image.jpg" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
