@@ -1,9 +1,8 @@
--- Create a bucket for product images
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('product-images', 'product-images', true)
-ON CONFLICT (id) DO NOTHING;
-
 -- Set up access controls for the product images bucket
+-- Note: The bucket itself must be created manually through the Supabase dashboard
+-- Bucket name: product-images
+-- Bucket settings: Public access enabled
+
 CREATE POLICY "Anyone can view product images" 
 ON storage.objects 
 FOR SELECT 
@@ -28,5 +27,5 @@ FOR DELETE
 TO authenticated 
 USING (bucket_id = 'product-images' AND auth.uid() = owner);
 
--- Add comment to describe the bucket purpose
-COMMENT ON TABLE storage.buckets IS 'Storage buckets for application assets';
+-- Grant necessary permissions
+GRANT ALL ON TABLE storage.objects TO authenticated;
