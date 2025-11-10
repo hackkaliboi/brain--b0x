@@ -28,7 +28,7 @@ const Products = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const searchInputRef = useRef<HTMLInputElement>(null);
-  
+
   const { user, userRole, loading, signOut, canEdit, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -77,7 +77,7 @@ const Products = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      
+
       const transformedData = (data || []).map((item) => ({
         id: item.id,
         name: item.name,
@@ -86,10 +86,12 @@ const Products = () => {
         quantity: item.quantity,
         category: item.category,
         unit: item.unit || 'unit',
+        wholesale_unit: item.wholesale_unit,
+        retail_unit: item.retail_unit,
         expiry_date: item.expiry_date,
         lastUpdated: item.last_updated,
       }));
-      
+
       setProducts(transformedData);
     } catch (error: any) {
       toast({
@@ -141,8 +143,8 @@ const Products = () => {
     try {
       // Check for duplicate product (same name and category)
       const isDuplicate = products.some(
-        (product) => 
-          product.name.toLowerCase() === data.name.toLowerCase() && 
+        (product) =>
+          product.name.toLowerCase() === data.name.toLowerCase() &&
           product.category.toLowerCase() === data.category.toLowerCase()
       );
 

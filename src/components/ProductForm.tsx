@@ -44,27 +44,27 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
     resolver: zodResolver(productSchema),
     defaultValues: product
       ? {
-          name: product.name,
-          wholesale_price: product.wholesale_price,
-          retail_price: product.retail_price,
-          quantity: product.quantity,
-          category: product.category,
-          unit: product.unit,
-          wholesale_unit: product.wholesale_unit || "",
-          retail_unit: product.retail_unit || "",
-          expiry_date: product.expiry_date || "",
-        }
+        name: product.name,
+        wholesale_price: product.wholesale_price,
+        retail_price: product.retail_price,
+        quantity: product.quantity,
+        category: product.category,
+        unit: product.unit,
+        wholesale_unit: product.wholesale_unit || "",
+        retail_unit: product.retail_unit || "",
+        expiry_date: product.expiry_date || "",
+      }
       : {
-          name: "",
-          wholesale_price: 0,
-          retail_price: 0,
-          quantity: 0,
-          category: "",
-          unit: "unit",
-          wholesale_unit: "",
-          retail_unit: "",
-          expiry_date: "",
-        },
+        name: "",
+        wholesale_price: 0,
+        retail_price: 0,
+        quantity: 0,
+        category: "",
+        unit: "unit",
+        wholesale_unit: "",
+        retail_unit: "",
+        expiry_date: "",
+      },
   });
 
   return (

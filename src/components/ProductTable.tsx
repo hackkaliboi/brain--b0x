@@ -65,7 +65,7 @@ export const ProductTable = ({
   });
 
   const SortableHeader = ({ field, children, align = "left" }: { field: SortField; children: React.ReactNode; align?: "left" | "right" }) => (
-    <TableHead 
+    <TableHead
       className={`font-semibold cursor-pointer hover:bg-muted/50 select-none ${align === "right" ? "text-right" : ""}`}
       onClick={() => handleSort(field)}
     >
