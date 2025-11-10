@@ -51,11 +51,12 @@ export const ProductTable = ({
   };
 
   const sortedProducts = [...products].sort((a, b) => {
-    let aValue = a[sortField];
-    let bValue = b[sortField];
+    let aValue: string | number = a[sortField];
+    let bValue: string | number = b[sortField];
 
-    if (typeof aValue === "string") {
-      aValue = aValue.toLowerCase();
+    // Special handling for string fields to ensure proper alphabetical sorting
+    if (sortField === "name" || sortField === "category") {
+      aValue = (aValue as string).toLowerCase();
       bValue = (bValue as string).toLowerCase();
     }
 

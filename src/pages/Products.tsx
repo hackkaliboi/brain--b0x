@@ -74,7 +74,7 @@ const Products = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("name", { ascending: true }); // Changed from created_at to name for alphabetical sorting
 
       if (error) throw error;
 
