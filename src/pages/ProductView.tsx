@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Product } from "@/types/product";
-import { ArrowLeft, Pencil, Calendar, Package, Tag } from "lucide-react";
+import { ArrowLeft, Pencil, Calendar, Package, Tag, AlertTriangle, TriangleAlert } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const ProductView = () => {
@@ -239,16 +239,17 @@ const ProductView = () => {
               </div>
               {product.quantity <= 10 && product.quantity > 0 && (
                 <div className="mt-2 flex items-center text-yellow-600">
-                  <AlertTriangle className="mr-2 h-4 w-4" />
+                  <TriangleAlert className="mr-2 h-4 w-4" />
                   <span>Low stock alert</span>
                 </div>
               )}
               {product.quantity === 0 && (
                 <div className="mt-2 flex items-center text-red-600">
-                  <AlertTriangle className="mr-2 h-4 w-4" />
+                  <TriangleAlert className="mr-2 h-4 w-4" />
                   <span>Out of stock</span>
                 </div>
               )}
+
             </CardContent>
           </Card>
         </div>
