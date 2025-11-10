@@ -100,6 +100,7 @@ export const ProductTable = ({
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="font-semibold">Image</TableHead>
             <SortableHeader field="name">Product Name</SortableHeader>
             <SortableHeader field="category">Category</SortableHeader>
             {showWholesale && (
@@ -118,7 +119,7 @@ export const ProductTable = ({
         <TableBody>
           {sortedProducts.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={showWholesale ? 8 : 6} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={showWholesale ? 9 : 7} className="text-center text-muted-foreground py-8">
                 No products found
               </TableCell>
             </TableRow>
@@ -126,6 +127,23 @@ export const ProductTable = ({
             sortedProducts.map((product) => {
               return (
                 <TableRow key={product.id} className="hover:bg-muted/50">
+                  <TableCell>
+                    {product.image_url ? (
+                      <img 
+                        src={product.image_url} 
+                        alt={product.name} 
+                        className="h-10 w-10 object-contain rounded"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="h-10 w-10 flex items-center justify-center bg-muted rounded">
+                        <span className="text-xs text-muted-foreground">No Image</span>
+                      </div>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium">
                     <span>{product.name}</span>
                   </TableCell>

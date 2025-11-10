@@ -88,6 +88,7 @@ const Products = () => {
         unit: item.unit || 'unit',
         wholesale_unit: item.wholesale_unit,
         retail_unit: item.retail_unit,
+        image_url: item.image_url,
         expiry_date: item.expiry_date,
         lastUpdated: item.last_updated,
       }));
@@ -167,6 +168,7 @@ const Products = () => {
         unit: data.unit,
         wholesale_unit: data.wholesale_unit,
         retail_unit: data.retail_unit,
+        image_url: data.image_url,
         expiry_date: data.expiry_date,
         last_updated: new Date().toISOString(),
       };
@@ -205,6 +207,7 @@ const Products = () => {
         unit: data.unit,
         wholesale_unit: data.wholesale_unit,
         retail_unit: data.retail_unit,
+        image_url: data.image_url,
         expiry_date: data.expiry_date,
         last_updated: new Date().toISOString(),
       };
