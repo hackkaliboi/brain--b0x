@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Product } from "@/types/product";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,19 +25,24 @@ export const ProductCard = ({
     const saved = localStorage.getItem("showWholesale");
     return saved !== null ? JSON.parse(saved) : true;
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("showWholesale", JSON.stringify(showWholesale));
   }, [showWholesale]);
 
+  const handleCardClick = () => {
+    navigate(`/products/${product.id}`);
+  };
+
   return (
-    <Card className="transition-all hover:shadow-md">
+    <Card className="transition-all hover:shadow-md cursor-pointer" onClick={handleCardClick}>
       <CardContent className="p-4 space-y-3">
         {product.image_url && (
           <div className="flex justify-center">
-            <img 
-              src={product.image_url} 
-              alt={product.name} 
+            <img
+              src={product.image_url}
+              alt={product.name}
               className="h-24 w-24 object-contain rounded-md"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
@@ -55,7 +61,10 @@ export const ProductCard = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setShowWholesale(!showWholesale)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowWholesale(!showWholesale);
+              }}
             >
               {showWholesale ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </Button>
@@ -63,7 +72,10 @@ export const ProductCard = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onEdit(product)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(product);
+                }}
               >
                 <Pencil className="h-4 w-4" />
               </Button>
@@ -72,7 +84,10 @@ export const ProductCard = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onDelete(product.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(product.id);
+                }}
                 className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
               >
                 <Trash2 className="h-4 w-4" />

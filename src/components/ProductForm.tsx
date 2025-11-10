@@ -72,33 +72,33 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
         expiry_date: "",
       },
   });
-  
+
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
 
   const handleImageUpload = async (file: File) => {
     try {
       setIsUploading(true);
-      
+
       // Generate a unique file name
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
-      
+
       // Upload the file to Supabase storage
       const { data, error } = await supabase.storage
         .from('product-images')
         .upload(fileName, file);
-      
+
       if (error) throw error;
-      
+
       // Get the public URL for the uploaded file
       const { data: { publicUrl } } = supabase.storage
         .from('product-images')
         .getPublicUrl(fileName);
-      
+
       // Set the image URL in the form
       form.setValue('image_url', publicUrl);
-      
+
       toast({
         title: "Success",
         description: "Image uploaded successfully",
@@ -272,9 +272,9 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
                   )}
                   {form.watch('image_url') && (
                     <div className="mt-2">
-                      <img 
-                        src={form.watch('image_url')} 
-                        alt="Preview" 
+                      <img
+                        src={form.watch('image_url')}
+                        alt="Preview"
                         className="h-20 w-20 object-contain rounded"
                       />
                       <Button

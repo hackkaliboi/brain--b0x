@@ -66,7 +66,7 @@ export const ProductTable = ({
   });
 
   const SortableHeader = ({ field, children, align = "left" }: { field: SortField; children: React.ReactNode; align?: "left" | "right" }) => (
-    <TableHead 
+    <TableHead
       className={`font-semibold cursor-pointer hover:bg-muted/50 select-none ${align === "right" ? "text-right" : ""}`}
       onClick={() => handleSort(field)}
     >
@@ -130,9 +130,9 @@ export const ProductTable = ({
                 <TableRow key={product.id} className="hover:bg-muted/50">
                   <TableCell>
                     {product.image_url ? (
-                      <img 
-                        src={product.image_url} 
-                        alt={product.name} 
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
                         className="h-10 w-10 object-contain rounded"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
