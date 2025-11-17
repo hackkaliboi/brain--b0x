@@ -25,8 +25,8 @@ import { useToast } from "@/hooks/use-toast";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(100),
-  wholesale_price: z.coerce.number().min(0, "Wholesale price must be 0 or positive"),
-  retail_price: z.coerce.number().min(0, "Retail price must be 0 or positive"),
+  wholesale_price: z.string().min(1, "Wholesale price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
+  retail_price: z.string().min(1, "Retail price is required").regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
   quantity: z.coerce.number().int().min(0, "Quantity must be 0 or positive"),
   category: z.string().min(1, "Category is required"),
   unit: z.string().min(1, "Unit is required").max(50),
@@ -49,8 +49,8 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
     defaultValues: product
       ? {
         name: product.name,
-        wholesale_price: product.wholesale_price,
-        retail_price: product.retail_price,
+        wholesale_price: product.wholesale_price.toString(),
+        retail_price: product.retail_price.toString(),
         quantity: product.quantity,
         category: product.category,
         unit: product.unit,
@@ -61,8 +61,8 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
       }
       : {
         name: "",
-        wholesale_price: 0,
-        retail_price: 0,
+        wholesale_price: "",
+        retail_price: "",
         quantity: 0,
         category: "",
         unit: "unit",
@@ -72,33 +72,33 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
         expiry_date: "",
       },
   });
-
+  
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
 
   const handleImageUpload = async (file: File) => {
     try {
       setIsUploading(true);
-
+      
       // Generate a unique file name
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
-
+      
       // Upload the file to Supabase storage
       const { data, error } = await supabase.storage
         .from('product-images')
         .upload(fileName, file);
-
+      
       if (error) throw error;
-
+      
       // Get the public URL for the uploaded file
       const { data: { publicUrl } } = supabase.storage
         .from('product-images')
         .getPublicUrl(fileName);
-
+      
       // Set the image URL in the form
       form.setValue('image_url', publicUrl);
-
+      
       toast({
         title: "Success",
         description: "Image uploaded successfully",
@@ -121,9 +121,19 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
     }
   };
 
+  // Custom submit handler to convert string prices to numbers
+  const handleSubmit = (data: z.infer<typeof productSchema>) => {
+    const numericData = {
+      ...data,
+      wholesale_price: parseFloat(data.wholesale_price),
+      retail_price: parseFloat(data.retail_price),
+    };
+    onSubmit(numericData as ProductFormData);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -146,7 +156,7 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
               <FormItem>
                 <FormLabel>Wholesale Price (₦)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" placeholder="0.00" {...field} />
+                  <Input placeholder="0.00" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -160,7 +170,7 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
               <FormItem>
                 <FormLabel>Retail Price (₦)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" placeholder="0.00" {...field} />
+                  <Input placeholder="0.00" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -272,9 +282,9 @@ export const ProductForm = ({ product, categories, onSubmit, onCancel }: Product
                   )}
                   {form.watch('image_url') && (
                     <div className="mt-2">
-                      <img
-                        src={form.watch('image_url')}
-                        alt="Preview"
+                      <img 
+                        src={form.watch('image_url')} 
+                        alt="Preview" 
                         className="h-20 w-20 object-contain rounded"
                       />
                       <Button

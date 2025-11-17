@@ -13,10 +13,16 @@ export interface Product {
   lastUpdated: string;
 }
 
-export interface Category {
-  id: string;
+// Update ProductFormData to accept string prices for form input
+export interface ProductFormData {
   name: string;
-  created_at: string;
+  wholesale_price: number | string;
+  retail_price: number | string;
+  quantity: number;
+  category: string;
+  unit: string;
+  wholesale_unit?: string;
+  retail_unit?: string;
+  image_url?: string;
+  expiry_date?: string;
 }
-
-export type ProductFormData = Omit<Product, "id" | "lastUpdated">;

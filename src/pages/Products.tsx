@@ -161,8 +161,8 @@ const Products = () => {
       // Map TypeScript field names to database column names
       const insertData = {
         name: data.name,
-        wholesale_price: data.wholesale_price,
-        retail_price: data.retail_price,
+        wholesale_price: typeof data.wholesale_price === 'string' ? parseFloat(data.wholesale_price) : data.wholesale_price,
+        retail_price: typeof data.retail_price === 'string' ? parseFloat(data.retail_price) : data.retail_price,
         quantity: data.quantity,
         category: data.category,
         unit: data.unit,
@@ -200,8 +200,8 @@ const Products = () => {
       // Map TypeScript field names to database column names
       const updateData = {
         name: data.name,
-        wholesale_price: data.wholesale_price,
-        retail_price: data.retail_price,
+        wholesale_price: typeof data.wholesale_price === 'string' ? parseFloat(data.wholesale_price) : data.wholesale_price,
+        retail_price: typeof data.retail_price === 'string' ? parseFloat(data.retail_price) : data.retail_price,
         quantity: data.quantity,
         category: data.category,
         unit: data.unit,
